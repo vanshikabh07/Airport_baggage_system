@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyFlow - Module 1: Baggage Registration</title>
+
+    <!-- Embedded CSS Styling -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            padding-bottom: 30px;
+        }
+
+        /* Header & Brand */
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .brand-sub {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            background-color: #2563eb;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: #0f172a;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 850px;
+            margin: 25px auto;
+            background: white;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #1e3a8a;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* Form Styles */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-align {
+            justify-content: flex-end;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* Buttons */
+        .form-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 9px 16px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-reset {
+            background-color: #e2e8f0;
+            color: #333;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-small-delete {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f5f9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .table-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Message */
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: #16a34a;
+        }
+
+        .message.error {
+            color: #dc2626;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="brand-container">
+            <svg class="site-logo" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/>
+            </svg>
+            <span class="brand-title">SkyFlow</span>
+        </div>
+        <p class="brand-sub">Airport Baggage Tracking & Management</p>
+        <nav>
+            <a href="index.html" class="active">Module 1: Registration</a>
+            <a href="../module2-handling/index.html">Module 2: Handling Stages</a>
+            <a href="../module3-search/index.html">Module 3: Baggage Search</a>
+            <a href="../module4-exception/index.html">Module 4: Exception Handling</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <h2>Module 1: Baggage Registration (Check-in Counter)</h2>
+        <p>Enter the passenger and baggage details below to register the luggage and generate a tag.</p>
+
+        <!-- Registration Form -->
+        <form id="baggageForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="passengerName">Passenger Name:</label>
+                    <input type="text" id="passengerName" placeholder="e.g. John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pnrNumber">PNR / Ticket Number:</label>
+                    <input type="text" id="pnrNumber" placeholder="e.g. ABC123" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="flightNumber">Flight Number:</label>
+                    <input type="text" id="flightNumber" placeholder="e.g. AI-202" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Baggage Weight (in kg):</label>
+                    <input type="number" id="weight" placeholder="e.g. 15" min="1" max="40" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="departure">Departure Airport:</label>
+                    <input type="text" id="departure" placeholder="e.g. Delhi (DEL)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="destination">Destination Airport:</label>
+                    <input type="text" id="destination" placeholder="e.g. Mumbai (BOM)" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tagId">Baggage Tag ID:</label>
+                    <input type="text" id="tagId" readonly>
+                </div>
+                <div class="form-group btn-align">
+                    <button type="button" id="generateTagBtn" class="btn-secondary">Generate Tag ID</button>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-primary">Register Baggage</button>
+                <button type="reset" class="btn-reset">Reset</button>
+            </div>
+        </form>
+
+        <p id="messageText" class="message"></p>
+
+        <hr>
+
+        <!-- Registered Baggage Table -->
+        <h3>Registered Baggage List</h3>
+        <p>All baggages registered here are saved into the browser's localStorage for Modules 2, 3, and 4.</p>
+
+        <table id="baggageTable">
+            <thead>
+                <tr>
+                    <th>Tag ID</th>
+                    <th>Passenger</th>
+                    <th>Flight</th>
+                    <th>PNR</th>
+                    <th>Route</th>
+                    <th>Weight</th>
+                    <th>Current Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Rows added dynamically with JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="table-actions">
+            <button type="button" id="loadDemoBtn" class="btn-secondary">Load Demo Bags</button>
+            <button type="button" id="clearAllBtn" class="btn-danger">Clear All</button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; SkyFlow Airport Baggage Tracking System. All rights reserved.</p>
+    </footer>
+
+    <!-- Embedded JavaScript Logic -->
+    <script>
+        // Storage key used across all modules
+        var STORAGE_KEY = "airport_baggages";
+
+        var baggageForm = document.getElementById("baggageForm");
+        var tagIdInput = document.getElementById("tagId");
+        var generateTagBtn = document.getElementById("generateTagBtn");
+        var tableBody = document.getElementById("tableBody");
+        var messageText = document.getElementById("messageText");
+        var loadDemoBtn = document.getElementById("loadDemoBtn");
+        var clearAllBtn = document.getElementById("clearAllBtn");
+
+        // When page opens
+        window.onload = function () {
+            makeNewTag();
+            displayBaggageTable();
+        };
+
+        // Generate Tag ID
+        function makeNewTag() {
+            var randomNum = Math.floor(1000 + Math.random() * 9000);
+            var newTag = "TAG-" + randomNum;
+            tagIdInput.value = newTag;
+            return newTag;
+        }
+
+        generateTagBtn.onclick = function () {
+            makeNewTag();
+            showMessage("New Tag ID generated!", "success");
+        };
+
+        function getBaggageData() {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveBaggageData(list) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function showMessage(msg, type) {
+            messageText.textContent = msg;
+            messageText.className = "message " + type;
+            setTimeout(function () {
+                messageText.textContent = "";
+            }, 3000);
+        }
+
+        // Form Submit
+        baggageForm.onsubmit = function (event) {
+            event.preventDefault();
+
+            var name = document.getElementById("passengerName").value;
+            var pnr = document.getElementById("pnrNumber").value.toUpperCase();
+            var flight = document.getElementById("flightNumber").value.toUpperCase();
+            var weight = document.getElementById("weight").value;
+            var dep = document.getElementById("departure").value;
+            var dest = document.getElementById("destination").value;
+            var tag = tagIdInput.value;
+
+            if (dep.toLowerCase() === dest.toLowerCase()) {
+                showMessage("Departure and Destination cannot be the same!", "error");
+                return;
+            }
+
+            var newBag = {
+                tagId: tag,
+                passengerName: name,
+                pnrNumber: pnr,
+                flightNumber: flight,
+                weight: weight + " kg",
+                departure: dep,
+                destination: dest,
+                status: "Check-in / Registration",
+                stageIndex: 0,
+                date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            var baggageList = getBaggageData();
+            baggageList.push(newBag);
+            saveBaggageData(baggageList);
+
+            displayBaggageTable();
+            baggageForm.reset();
+            makeNewTag();
+            showMessage("Baggage registered successfully with Tag ID: " + tag, "success");
+        };
+
+        // Display Table
+        function displayBaggageTable() {
+            var baggageList = getBaggageData();
+            tableBody.innerHTML = "";
+
+            if (baggageList.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>No bags registered yet. Fill the form above!</td></tr>";
+                return;
+            }
+
+            for (var i = 0; i < baggageList.length; i++) {
+                var bag = baggageList[i];
+                var row = document.createElement("tr");
+
+                row.innerHTML = "<td><b>" + bag.tagId + "</b></td>" +
+                    "<td>" + bag.passengerName + "</td>" +
+                    "<td>" + bag.flightNumber + "</td>" +
+                    "<td>" + bag.pnrNumber + "</td>" +
+                    "<td>" + bag.departure + " &rarr; " + bag.destination + "</td>" +
+                    "<td>" + bag.weight + "</td>" +
+                    "<td>" + bag.status + "</td>" +
+                    "<td><button type='button' class='btn-small-delete' onclick='removeBaggage(" + i + ")'>Delete</button></td>";
+
+                tableBody.appendChild(row);
+            }
+        }
+
+        // Delete Baggage
+        function removeBaggage(index) {
+            if (confirm("Do you want to delete this baggage entry?")) {
+                var baggageList = getBaggageData();
+                baggageList.splice(index, 1);
+                saveBaggageData(baggageList);
+                displayBaggageTable();
+                showMessage("Entry deleted.", "success");
+            }
+        }
+
+        // Demo sample data
+        loadDemoBtn.onclick = function () {
+            var sampleData = [
+                {
+                    tagId: "TAG-1011",
+                    passengerName: "Aarav Sharma",
+                    pnrNumber: "AB12CD",
+                    flightNumber: "AI-202",
+                    weight: "15 kg",
+                    departure: "Delhi",
+                    destination: "Mumbai",
+                    status: "Check-in / Registration",
+                    stageIndex: 0,
+                    date: "19/11/2026, 10:00 AM"
+                },
+                {
+                    tagId: "TAG-2045",
+                    passengerName: "Priya Patel",
+                    pnrNumber: "XY98ZT",
+                    flightNumber: "6E-551",
+                    weight: "12 kg",
+                    departure: "Bengaluru",
+                    destination: "Delhi",
+                    status: "Security screening",
+                    stageIndex: 1,
+                    date: "19/11/2026, 10:30 AM"
+                }
+            ];
+            saveBaggageData(sampleData);
+            displayBaggageTable();
+            showMessage("Loaded demo baggage data!", "success");
+        };
+
+        // Clear All
+        clearAllBtn.onclick = function () {
+            if (confirm("Are you sure you want to clear all baggage records?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                displayBaggageTable();
+                showMessage("All records cleared.", "error");
+            }
+        };
+    </script>
+</body>
+</html>

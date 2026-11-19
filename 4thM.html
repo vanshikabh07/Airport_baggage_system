@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyFlow - Module 4: Exception Handling</title>
+
+    <!-- Embedded CSS Styling -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            padding-bottom: 30px;
+        }
+
+        /* Header & Brand */
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .brand-sub {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            background-color: #2563eb;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: #0f172a;
+        }
+
+        /* Container */
+        .container {
+            max-width: 850px;
+            margin: 25px auto;
+            background: white;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #b91c1c;
+        }
+
+        h3 {
+            font-size: 17px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #1e3a8a;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            margin: 25px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* Form */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #b91c1c;
+        }
+
+        /* Buttons */
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 9px 16px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-reset {
+            background-color: #e2e8f0;
+            color: #333;
+        }
+
+        .btn-small-resolve {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .btn-small-delete {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #f87171;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-investigating {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-resolved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 9px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f5f9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .table-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Message */
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="brand-container">
+            <svg class="site-logo" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/>
+            </svg>
+            <span class="brand-title">SkyFlow</span>
+        </div>
+        <p class="brand-sub">Airport Baggage Tracking & Management</p>
+        <nav>
+            <a href="../module1-registration/index.html">Module 1: Registration</a>
+            <a href="../module2-handling/index.html">Module 2: Handling Stages</a>
+            <a href="../module3-search/index.html">Module 3: Baggage Search</a>
+            <a href="index.html" class="active">Module 4: Exception Handling</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <h2>Module 4: Baggage Exception Handling & Claims</h2>
+        <p>Report delayed, lost, or damaged luggage and file a tracking grievance claim.</p>
+
+        <!-- Complaint Filing Form -->
+        <form id="claimForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="passengerName">Passenger Name:</label>
+                    <input type="text" id="passengerName" placeholder="e.g. John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tagOrPnr">Baggage Tag ID or PNR:</label>
+                    <input type="text" id="tagOrPnr" placeholder="e.g. TAG-1011 or AB12CD" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="flightNumber">Flight Number:</label>
+                    <input type="text" id="flightNumber" placeholder="e.g. AI-202" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="issueType">Type of Issue (Exception):</label>
+                    <select id="issueType" required>
+                        <option value="Lost Baggage">Lost Baggage (Not on belt)</option>
+                        <option value="Delayed Baggage">Delayed Baggage (Flight transfer delay)</option>
+                        <option value="Damaged Baggage">Damaged Baggage (Broken bag/zipper)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="contactNumber">Contact Phone Number:</label>
+                    <input type="tel" id="contactNumber" placeholder="e.g. 9876543210" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bagDescription">Bag Color / Description:</label>
+                    <input type="text" id="bagDescription" placeholder="e.g. Black American Tourister with red ribbon" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="comments">Additional Details / Where last seen:</label>
+                <textarea id="comments" rows="3" placeholder="Enter any extra details..."></textarea>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn-danger">File Baggage Claim</button>
+                <button type="reset" class="btn-reset">Reset Form</button>
+            </div>
+        </form>
+
+        <p id="claimMessage" class="message"></p>
+
+        <hr>
+
+        <!-- Reported Claims Table -->
+        <h3>Active Baggage Exception Claims</h3>
+        <p>List of all filed baggage grievance cases stored in localStorage:</p>
+
+        <table id="claimsTable">
+            <thead>
+                <tr>
+                    <th>Claim ID</th>
+                    <th>Tag / PNR</th>
+                    <th>Passenger</th>
+                    <th>Flight</th>
+                    <th>Issue Type</th>
+                    <th>Status</th>
+                    <th>Filed On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="claimsBody">
+                <!-- Dynamically generated rows -->
+            </tbody>
+        </table>
+
+        <div class="table-actions">
+            <button type="button" id="loadDemoClaimsBtn" class="btn-secondary">Load Demo Claim</button>
+            <button type="button" id="clearClaimsBtn" class="btn-danger">Clear All Claims</button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; SkyFlow Airport Baggage Tracking System. All rights reserved.</p>
+    </footer>
+
+    <!-- Embedded JavaScript Logic -->
+    <script>
+        var CLAIMS_STORAGE_KEY = "airport_claims";
+        var BAGGAGE_STORAGE_KEY = "airport_baggages";
+
+        var claimForm = document.getElementById("claimForm");
+        var claimsBody = document.getElementById("claimsBody");
+        var claimMessage = document.getElementById("claimMessage");
+        var loadDemoClaimsBtn = document.getElementById("loadDemoClaimsBtn");
+        var clearClaimsBtn = document.getElementById("clearClaimsBtn");
+
+        window.onload = function () {
+            displayClaimsTable();
+        };
+
+        function getClaimsData() {
+            var saved = localStorage.getItem(CLAIMS_STORAGE_KEY);
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveClaimsData(list) {
+            localStorage.setItem(CLAIMS_STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function makeClaimId() {
+            var num = Math.floor(100 + Math.random() * 900);
+            return "CLAIM-" + num;
+        }
+
+        claimForm.onsubmit = function (event) {
+            event.preventDefault();
+
+            var name = document.getElementById("passengerName").value.trim();
+            var tagOrPnr = document.getElementById("tagOrPnr").value.trim().toUpperCase();
+            var flight = document.getElementById("flightNumber").value.trim().toUpperCase();
+            var issue = document.getElementById("issueType").value;
+            var contact = document.getElementById("contactNumber").value.trim();
+            var desc = document.getElementById("bagDescription").value.trim();
+            var comments = document.getElementById("comments").value.trim();
+
+            var claimId = makeClaimId();
+            var today = new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            var newClaim = {
+                claimId: claimId,
+                passengerName: name,
+                tagOrPnr: tagOrPnr,
+                flightNumber: flight,
+                issueType: issue,
+                contact: contact,
+                description: desc,
+                comments: comments,
+                status: "Under Investigation",
+                date: today
+            };
+
+            var claimsList = getClaimsData();
+            claimsList.push(newClaim);
+            saveClaimsData(claimsList);
+
+            updateBaggageExceptionStatus(tagOrPnr, "Exception: " + issue);
+
+            displayClaimsTable();
+            claimForm.reset();
+
+            claimMessage.textContent = "Complaint filed successfully! Your Claim ID is " + claimId;
+            setTimeout(function () {
+                claimMessage.textContent = "";
+            }, 4000);
+        };
+
+        function updateBaggageExceptionStatus(tagOrPnr, newStatus) {
+            var bagData = localStorage.getItem(BAGGAGE_STORAGE_KEY);
+            if (!bagData) return;
+
+            var bags = JSON.parse(bagData);
+            for (var i = 0; i < bags.length; i++) {
+                if (bags[i].tagId === tagOrPnr || bags[i].pnrNumber === tagOrPnr) {
+                    bags[i].status = newStatus;
+                    break;
+                }
+            }
+            localStorage.setItem(BAGGAGE_STORAGE_KEY, JSON.stringify(bags));
+        }
+
+        function displayClaimsTable() {
+            var claimsList = getClaimsData();
+            claimsBody.innerHTML = "";
+
+            if (claimsList.length === 0) {
+                claimsBody.innerHTML = "<tr><td colspan='8' style='text-align:center;'>No exception claims filed yet.</td></tr>";
+                return;
+            }
+
+            for (var i = 0; i < claimsList.length; i++) {
+                var claim = claimsList[i];
+                var row = document.createElement("tr");
+
+                var badgeClass = claim.status === "Resolved" ? "status-badge status-resolved" : "status-badge status-investigating";
+
+                row.innerHTML = "<td><b>" + claim.claimId + "</b></td>" +
+                    "<td>" + claim.tagOrPnr + "</td>" +
+                    "<td>" + claim.passengerName + "</td>" +
+                    "<td>" + claim.flightNumber + "</td>" +
+                    "<td>" + claim.issueType + "</td>" +
+                    "<td><span class='" + badgeClass + "'>" + claim.status + "</span></td>" +
+                    "<td>" + claim.date + "</td>" +
+                    "<td>" +
+                    "<button type='button' class='btn-small-resolve' onclick='resolveClaim(" + i + ")'>Resolve</button>" +
+                    "<button type='button' class='btn-small-delete' onclick='deleteClaim(" + i + ")'>Delete</button>" +
+                    "</td>";
+
+                claimsBody.appendChild(row);
+            }
+        }
+
+        function resolveClaim(index) {
+            var claimsList = getClaimsData();
+            claimsList[index].status = "Resolved";
+            saveClaimsData(claimsList);
+            displayClaimsTable();
+            alert("Claim " + claimsList[index].claimId + " marked as Resolved!");
+        }
+
+        function deleteClaim(index) {
+            if (confirm("Do you want to delete this claim record?")) {
+                var claimsList = getClaimsData();
+                claimsList.splice(index, 1);
+                saveClaimsData(claimsList);
+                displayClaimsTable();
+            }
+        }
+
+        loadDemoClaimsBtn.onclick = function () {
+            var demoClaims = [
+                {
+                    claimId: "CLAIM-101",
+                    passengerName: "Rahul Verma",
+                    tagOrPnr: "TAG-1011",
+                    flightNumber: "AI-202",
+                    issueType: "Delayed Baggage",
+                    contact: "9876543210",
+                    description: "Blue VIP trolley bag",
+                    comments: "Bag didn't appear on belt 4",
+                    status: "Under Investigation",
+                    date: "19/11/2026, 11:30 AM"
+                }
+            ];
+            saveClaimsData(demoClaims);
+            displayClaimsTable();
+            alert("Demo claim loaded!");
+        };
+
+        clearClaimsBtn.onclick = function () {
+            if (confirm("Are you sure you want to clear all filed claims?")) {
+                localStorage.removeItem(CLAIMS_STORAGE_KEY);
+                displayClaimsTable();
+            }
+        };
+    </script>
+</body>
+</html>

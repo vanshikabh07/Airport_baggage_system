@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyFlow - Module 2: Handling Stages</title>
+
+    <!-- Embedded CSS Styling -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            padding-bottom: 30px;
+        }
+
+        /* Header & Brand */
+        header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .brand-sub {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            background-color: #2563eb;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: #0f172a;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 850px;
+            margin: 25px auto;
+            background: white;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #1e3a8a;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Select Row */
+        .select-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        select {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Bag Details */
+        .bag-details {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .bag-details p {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .highlight {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Visual Flow of 6 Stages */
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 20px 0;
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .stage-box {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 10px 5px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            background-color: #f1f5f9;
+        }
+
+        .stage-num {
+            font-size: 12px;
+            font-weight: bold;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .stage-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .arrow {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: bold;
+        }
+
+        /* Stage Box States */
+        .stage-box.completed {
+            background-color: #dcfce7;
+            border-color: #16a34a;
+        }
+
+        .stage-box.completed .stage-title {
+            color: #16a34a;
+        }
+
+        .stage-box.active {
+            background-color: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .stage-box.active .stage-title {
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        .status-summary {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin-top: 10px;
+        }
+
+        /* Controls */
+        .control-buttons {
+            margin-bottom: 15px;
+        }
+
+        .manual-update {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .manual-update label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 9px 16px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #cbd5e1 !important;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        /* Message */
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        @media (max-width: 700px) {
+            .visual-flow {
+                flex-direction: column;
+            }
+            .arrow {
+                transform: rotate(90deg);
+                margin: 5px 0;
+            }
+            .stage-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="brand-container">
+            <svg class="site-logo" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/>
+            </svg>
+            <span class="brand-title">SkyFlow</span>
+        </div>
+        <p class="brand-sub">Airport Baggage Tracking & Management</p>
+        <nav>
+            <a href="../module1-registration/index.html">Module 1: Registration</a>
+            <a href="index.html" class="active">Module 2: Handling Stages</a>
+            <a href="../module3-search/index.html">Module 3: Baggage Search</a>
+            <a href="../module4-exception/index.html">Module 4: Exception Handling</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <h2>Module 2: Baggage Handling Stages & Visual Flow</h2>
+        <p>Airport ground staff updates the baggage through the 6 handling stages from check-in to aircraft.</p>
+
+        <!-- Step 1: Select Baggage -->
+        <div class="card">
+            <h3>1. Select Baggage</h3>
+            <label for="bagSelect">Choose a registered bag from Module 1:</label>
+            <div class="select-row">
+                <select id="bagSelect">
+                    <option value="">-- Select a bag --</option>
+                </select>
+                <button type="button" id="loadBagBtn" class="btn-primary">View Stage</button>
+            </div>
+
+            <!-- Selected Bag Details -->
+            <div id="bagDetailsBox" class="bag-details hidden">
+                <p><b>Tag ID:</b> <span id="dispTag">-</span></p>
+                <p><b>Passenger:</b> <span id="dispPassenger">-</span></p>
+                <p><b>Flight:</b> <span id="dispFlight">-</span></p>
+                <p><b>Route:</b> <span id="dispRoute">-</span></p>
+                <p><b>Current Status:</b> <span id="dispStatus" class="highlight">-</span></p>
+            </div>
+        </div>
+
+        <!-- Step 2: Visual Flow of 6 Stages -->
+        <div class="card">
+            <h3>2. Visual Handling Flow</h3>
+            <p>The highlighted stage shows where this baggage currently is:</p>
+
+            <div class="visual-flow">
+                <div class="stage-box" id="stageBox-0">
+                    <div class="stage-num">1</div>
+                    <div class="stage-title">Check-in / Registration</div>
+                </div>
+
+                <div class="arrow">&rarr;</div>
+
+                <div class="stage-box" id="stageBox-1">
+                    <div class="stage-num">2</div>
+                    <div class="stage-title">Security Screening</div>
+                </div>
+
+                <div class="arrow">&rarr;</div>
+
+                <div class="stage-box" id="stageBox-2">
+                    <div class="stage-num">3</div>
+                    <div class="stage-title">Sorting</div>
+                </div>
+
+                <div class="arrow">&rarr;</div>
+
+                <div class="stage-box" id="stageBox-3">
+                    <div class="stage-num">4</div>
+                    <div class="stage-title">Conveyor Movement</div>
+                </div>
+
+                <div class="arrow">&rarr;</div>
+
+                <div class="stage-box" id="stageBox-4">
+                    <div class="stage-num">5</div>
+                    <div class="stage-title">Loading</div>
+                </div>
+
+                <div class="arrow">&rarr;</div>
+
+                <div class="stage-box" id="stageBox-5">
+                    <div class="stage-num">6</div>
+                    <div class="stage-title">Aircraft Transfer</div>
+                </div>
+            </div>
+
+            <p id="flowStatusMessage" class="status-summary">Please select a baggage above.</p>
+        </div>
+
+        <!-- Step 3: Staff Controls to Advance Stage -->
+        <div class="card">
+            <h3>3. Update Baggage Stage</h3>
+            <p>Advance the baggage to the next stage or pick a specific stage:</p>
+
+            <div class="control-buttons">
+                <button type="button" id="nextStageBtn" class="btn-primary" disabled>Advance to Next Stage &rarr;</button>
+            </div>
+
+            <div class="manual-update">
+                <label for="stageDropdown">Or Set Specific Stage:</label>
+                <select id="stageDropdown" disabled>
+                    <option value="0">1. Check-in / Registration</option>
+                    <option value="1">2. Security screening</option>
+                    <option value="2">3. Sorting</option>
+                    <option value="3">4. Conveyor movement</option>
+                    <option value="4">5. Loading</option>
+                    <option value="5">6. Aircraft transfer</option>
+                </select>
+                <button type="button" id="setStageBtn" class="btn-secondary" disabled>Update Stage</button>
+            </div>
+            
+            <p id="updateMessage" class="message"></p>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; SkyFlow Airport Baggage Tracking System. All rights reserved.</p>
+    </footer>
+
+    <!-- Embedded JavaScript Logic -->
+    <script>
+        var STORAGE_KEY = "airport_baggages";
+
+        var stagesList = [
+            "Check-in / Registration",
+            "Security screening",
+            "Sorting",
+            "Conveyor movement",
+            "Loading",
+            "Aircraft transfer"
+        ];
+
+        var selectedBag = null;
+
+        var bagSelect = document.getElementById("bagSelect");
+        var loadBagBtn = document.getElementById("loadBagBtn");
+        var bagDetailsBox = document.getElementById("bagDetailsBox");
+        var dispTag = document.getElementById("dispTag");
+        var dispPassenger = document.getElementById("dispPassenger");
+        var dispFlight = document.getElementById("dispFlight");
+        var dispRoute = document.getElementById("dispRoute");
+        var dispStatus = document.getElementById("dispStatus");
+
+        var flowStatusMessage = document.getElementById("flowStatusMessage");
+        var nextStageBtn = document.getElementById("nextStageBtn");
+        var stageDropdown = document.getElementById("stageDropdown");
+        var setStageBtn = document.getElementById("setStageBtn");
+        var updateMessage = document.getElementById("updateMessage");
+
+        window.onload = function () {
+            loadBagsIntoDropdown();
+        };
+
+        function getBaggageData() {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function saveBaggageData(list) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        }
+
+        function loadBagsIntoDropdown() {
+            var bags = getBaggageData();
+            bagSelect.innerHTML = '<option value="">-- Select a bag --</option>';
+
+            if (bags.length === 0) {
+                flowStatusMessage.textContent = "No registered baggage found. Please register bags in Module 1 first!";
+                return;
+            }
+
+            for (var i = 0; i < bags.length; i++) {
+                var opt = document.createElement("option");
+                opt.value = bags[i].tagId;
+                opt.textContent = bags[i].tagId + " - " + bags[i].passengerName + " (" + bags[i].flightNumber + ")";
+                bagSelect.appendChild(opt);
+            }
+        }
+
+        loadBagBtn.onclick = function () {
+            var tag = bagSelect.value;
+            if (!tag) {
+                alert("Please select a bag from the list first.");
+                return;
+            }
+
+            var bags = getBaggageData();
+            for (var i = 0; i < bags.length; i++) {
+                if (bags[i].tagId === tag) {
+                    selectedBag = bags[i];
+                    break;
+                }
+            }
+
+            if (selectedBag) {
+                if (typeof selectedBag.stageIndex === "undefined") {
+                    selectedBag.stageIndex = 0;
+                }
+                showBagInfo();
+                updateVisualFlow();
+                enableControls(true);
+            }
+        };
+
+        function showBagInfo() {
+            bagDetailsBox.classList.remove("hidden");
+            dispTag.textContent = selectedBag.tagId;
+            dispPassenger.textContent = selectedBag.passengerName;
+            dispFlight.textContent = selectedBag.flightNumber;
+            dispRoute.textContent = selectedBag.departure + " -> " + selectedBag.destination;
+            dispStatus.textContent = stagesList[selectedBag.stageIndex];
+            stageDropdown.value = selectedBag.stageIndex;
+        }
+
+        function updateVisualFlow() {
+            var current = selectedBag.stageIndex;
+
+            for (var i = 0; i < 6; i++) {
+                var box = document.getElementById("stageBox-" + i);
+                box.className = "stage-box";
+
+                if (i < current) {
+                    box.className = "stage-box completed";
+                } else if (i === current) {
+                    box.className = "stage-box active";
+                }
+            }
+
+            flowStatusMessage.textContent = "Current Stage " + (current + 1) + " of 6: " + stagesList[current];
+
+            if (current >= 5) {
+                nextStageBtn.disabled = true;
+                nextStageBtn.textContent = "Baggage Loaded onto Aircraft (Completed)";
+            } else {
+                nextStageBtn.disabled = false;
+                nextStageBtn.textContent = "Advance to Next Stage (" + stagesList[current + 1] + ") ->";
+            }
+        }
+
+        function enableControls(enable) {
+            nextStageBtn.disabled = !enable;
+            stageDropdown.disabled = !enable;
+            setStageBtn.disabled = !enable;
+        }
+
+        nextStageBtn.onclick = function () {
+            if (!selectedBag) return;
+
+            if (selectedBag.stageIndex < 5) {
+                selectedBag.stageIndex = selectedBag.stageIndex + 1;
+                selectedBag.status = stagesList[selectedBag.stageIndex];
+                saveUpdatedBag();
+                updateMessage.textContent = "Advanced to: " + selectedBag.status;
+            }
+        };
+
+        setStageBtn.onclick = function () {
+            if (!selectedBag) return;
+
+            var newIndex = parseInt(stageDropdown.value, 10);
+            selectedBag.stageIndex = newIndex;
+            selectedBag.status = stagesList[newIndex];
+            saveUpdatedBag();
+            updateMessage.textContent = "Stage updated to: " + selectedBag.status;
+        };
+
+        function saveUpdatedBag() {
+            var bags = getBaggageData();
+            for (var i = 0; i < bags.length; i++) {
+                if (bags[i].tagId === selectedBag.tagId) {
+                    bags[i] = selectedBag;
+                    break;
+                }
+            }
+            saveBaggageData(bags);
+            showBagInfo();
+            updateVisualFlow();
+        }
+    </script>
+</body>
+</html>
